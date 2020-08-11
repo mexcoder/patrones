@@ -15,7 +15,7 @@ class FeatureExtractor(object):
 class LenExtractor(FeatureExtractor):
     @staticmethod
     def getName():
-        return "Lenght"
+        return "Length"
 
     @staticmethod
     def getFeature(target):

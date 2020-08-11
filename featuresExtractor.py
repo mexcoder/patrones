@@ -1,6 +1,6 @@
 from features import LenExtractor
 
-extractors = [lenExtractor]
+extractors = [LenExtractor]
 
 
 def extractFeatures(target):
@@ -14,4 +14,4 @@ def extractFeatures(target):
 
 if __name__ == "__main__":
     testString = "https://test.com"
-    print extractFeatures(testString)
+    print (extractFeatures(testString))
