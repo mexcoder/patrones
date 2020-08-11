@@ -1,4 +1,4 @@
-from features import LenExtractor
+from basicFeatures import LenExtractor
 
 extractors = [LenExtractor]
 
