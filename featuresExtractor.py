@@ -2,13 +2,20 @@ from features import LenExtractor
 
 extractors = [LenExtractor]
 
+nameMapping = {"Length" : "URL_Length"}
+
 
 def extractFeatures(target):
 
     resultingFeatures = {}
 
     for extractor in extractors:
-        resultingFeatures [extractor.getName()] = extractor.getFeature(target)
+        name = extractor.getName()
+
+        if name in nameMapping:
+            name = nameMapping[name]
+
+        resultingFeatures [name] = extractor.getFeature(target)
     
     return resultingFeatures
 
