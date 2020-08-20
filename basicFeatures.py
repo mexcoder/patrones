@@ -1,4 +1,4 @@
-
+from FeatureEnum import Feature
 
 class FeatureExtractor(object):
 
@@ -19,4 +19,8 @@ class LenExtractor(FeatureExtractor):
 
     @staticmethod
     def getFeature(target):
-        return len(target)
+        URLLen = len(target)
+
+        return Feature.Legitimate if URLLen < 54 else (
+               Feature.Suspicious if URLLen <= 75 else
+               Feature.Pishing )
