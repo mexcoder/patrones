@@ -49,9 +49,7 @@ class UrlShortenedExtractor(UrlParsed):
     @staticmethod
     def getFeature(target):
         parsed = urlparse(target)  
-        return  Feature.Pishing if (parsed.hostname in
-                                     UrlShortenedExtractor.URLShorteners) 
-                                else
+        return  Feature.Pishing if (parsed.hostname in UrlShortenedExtractor.URLShorteners) else \
                 Feature.Legitimate
 
 class DashExtractor(UrlParsed):
@@ -110,6 +108,47 @@ class NumberSubdomainsExtractor(UrlParsed):
         if("www" in subdomains):
             count -= 1
         
-        return Feature.Legitimate if count == 1 else 
-               Feature.Suspicious if count == 2 else
+        return Feature.Legitimate if count == 1 else \
+               Feature.Suspicious if count == 2 else \
                Feature.Pishing
+
+class NonStandarPortExtractor(UrlParsed):
+
+    standarPort = {"FTP" : 21,
+                   "SSH" : 22,
+                   "Telnet" : 23,
+                   "HTTP" : 80,
+                   "HTTPS" : 443,
+                   "SMB" : 445,
+                   "MSSQL" : 1433,
+                   "ORACLE" : 1521,
+                   "MySQL" : 3306,
+                   "Remote Desktop" : 3389}
+
+    
+    @staticmethod
+    def getName():
+        return "having_IP_Address"
+
+    @staticmethod
+    def getFeature(target):
+        parsed = urlparse(target)
+        
+        defaultport = False
+
+
+        if(parsed.port is None):
+           defaultport = True
+
+        elif parsed.port == NonStandarPortExtractor.standarPort[parsed.scheme.upper()]:
+            defaultport = True
+       
+        
+        return Feature.Legitimate if defaultport else \
+               Feature.Pishing
+
+if __name__ == "__main__":
+    print(NonStandarPortExtractor.getFeature("https://mexcoder.com"))
+    print(NonStandarPortExtractor.getFeature("https://mexcoder.com:69"))
+    print(NonStandarPortExtractor.getFeature("https://mexcoder.com:8080"))
+    print(NonStandarPortExtractor.getFeature("https://mexcoder.com:443"))

@@ -1,3 +1,5 @@
 tld
 cachetools
 pyOpenSSL
+lxml
+bs4

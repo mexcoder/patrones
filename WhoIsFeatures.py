@@ -1,0 +1,45 @@
+import whois
+from cachetools import cached, LRUCache
+from basicFeatures import FeatureExtractor
+from FeatureEnum  import Feature
+from datetime import timedelta, datetime
+
+class WhoISExtractor(FeatureExtractor):
+
+    @staticmethod
+    @cached(LRUCache(255))
+    def fetchWhois(url):
+        return whois.whois(url)
+
+
+class DomainRegistrationExtractor(WhoISExtractor):
+    @staticmethod
+    def getName():
+        return "having_At_Symbol"
+
+    @staticmethod
+    def getFeature(target):
+        whois = WhoISExtractor.fetchWhois(target)
+
+        return Feature.Pishing if  whois["expiration_date"] - datetime.now() <= timedelta(days=365) else Feature.Legitimate
+
+class DomainAgeExtractor(WhoISExtractor):
+    @staticmethod
+    def getName():
+        return "having_At_Symbol"
+
+    @staticmethod
+    def getFeature(target):
+        creationDate = WhoISExtractor.fetchWhois(target).creation_date
+
+        if isinstance(creationDate, list):
+            creationDate = creationDate[0]
+
+        return Feature.Pishing if datetime.now() - creationDate  <= timedelta(days=30*6) else Feature.Legitimate
+
+if __name__ == "__main__":
+    from pprint import pprint
+    
+    pprint(DomainAgeExtractor.getFeature("facebook.com"))
+    print ("="*80)
+    pprint(DomainAgeExtractor.getFeature("mexcoder.com"))
