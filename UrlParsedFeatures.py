@@ -1,7 +1,8 @@
-from basicFeatures import FeatureExtractor
-from urllib.parse import urlparse
-from FeatureEnum import Feature
 import re
+from urllib.parse import urlparse
+from tld import get_tld
+from basicFeatures import FeatureExtractor
+from FeatureEnum import Feature
 
 class UrlParsed(FeatureExtractor):
     pass
@@ -75,3 +76,40 @@ class HttpsTokenExtractor(UrlParsed):
     def getFeature(target):  
         parsed = urlparse(target)     
         return Feature.Pishing if "https" in parsed.hostname else Feature.Legitimate
+
+class RedirectExtractor(UrlParsed):
+    
+    @staticmethod
+    def getName():
+        return "having_IP_Address"
+
+    @staticmethod
+    def getFeature(target):
+        try:
+            # index will raise an exception if the substring is not found thus not 
+            # performing the return
+            hasDoubleSlash = target.index("//", 7)
+            return Feature.Pishing
+        except:
+            pass
+        
+        return Feature.Legitimate
+
+
+class NumberSubdomainsExtractor(UrlParsed):
+    
+    @staticmethod
+    def getName():
+        return "having_IP_Address"
+
+    @staticmethod
+    def getFeature(target):
+        parsed = urlparse(target)
+        subdomains = get_tld(target, as_object=True).subdomains.split(".")
+        count = len(subdomains) + 1 # add one to account for the main domain
+        if("www" in subdomains):
+            count -= 1
+        
+        return Feature.Legitimate if count == 1 else 
+               Feature.Suspicious if count == 2 else
+               Feature.Pishing
