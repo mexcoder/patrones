@@ -15,7 +15,7 @@ class WhoISExtractor(FeatureExtractor):
 class DomainRegistrationExtractor(WhoISExtractor):
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "Domain_registeration_length"
 
     @staticmethod
     def getFeature(target):
@@ -26,7 +26,7 @@ class DomainRegistrationExtractor(WhoISExtractor):
 class DomainAgeExtractor(WhoISExtractor):
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "age_of_domain"
 
     @staticmethod
     def getFeature(target):
