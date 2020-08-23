@@ -10,7 +10,6 @@ class AlexaExtractor(FeatureExtractor):
     @staticmethod
     @cached(LRUCache(255))
     def fetchAlexaData(url):
-        body = None
         with urllib.request.urlopen("http://data.alexa.com/data?cli=10&dat=s&url="+url) as s:
             body = s.read()
 
