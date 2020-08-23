@@ -15,7 +15,7 @@ class HttpsStatusExtractor (WebClientExtractor):
 
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "SSLfinal_State"
 
     @staticmethod
     def getFeature(target):
@@ -36,7 +36,7 @@ class FavIconStatusExtractor (WebClientExtractor):
 
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "Favicon"
 
     @staticmethod
     def getFeature(target):
@@ -59,7 +59,7 @@ class RequestURLExtractor (WebClientExtractor):
 
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "Request_URL"
 
     @staticmethod
     def getFeature(target):
@@ -96,7 +96,7 @@ class anchorURLExtractor (WebClientExtractor):
 
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "URL_of_Anchor"
 
     @staticmethod
     def getFeature(target):
@@ -126,7 +126,7 @@ class LinksInMetaExtractor (WebClientExtractor):
 
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "Links_in_tags"
 
     @staticmethod
     def getFeature(target):
@@ -163,7 +163,7 @@ class ServerFromHandlerExtractor (WebClientExtractor):
 
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "SFH"
 
     @staticmethod
     def getFeature(target):
@@ -190,7 +190,7 @@ class MailToInServerFromHandlerExtractor (WebClientExtractor):
 
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "Submitting_to_email"
 
     @staticmethod
     def getFeature(target):
@@ -212,7 +212,7 @@ class IframeExtractor (WebClientExtractor):
 
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "Iframe"
 
     @staticmethod
     def getFeature(target):
