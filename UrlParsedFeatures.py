@@ -56,7 +56,7 @@ class DashExtractor(UrlParsed):
     
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "Prefix_Suffix"
 
     @staticmethod
     def getFeature(target):  
@@ -68,7 +68,7 @@ class HttpsTokenExtractor(UrlParsed):
     
     @staticmethod
     def getName():
-        return "having_At_Symbol"
+        return "HTTPS_token"
 
     @staticmethod
     def getFeature(target):  
@@ -79,7 +79,7 @@ class RedirectExtractor(UrlParsed):
     
     @staticmethod
     def getName():
-        return "having_IP_Address"
+        return "double_slash_redirecting"
 
     @staticmethod
     def getFeature(target):
@@ -98,7 +98,7 @@ class NumberSubdomainsExtractor(UrlParsed):
     
     @staticmethod
     def getName():
-        return "having_IP_Address"
+        return "having_Sub_Domain"
 
     @staticmethod
     def getFeature(target):
@@ -128,7 +128,7 @@ class NonStandarPortExtractor(UrlParsed):
     
     @staticmethod
     def getName():
-        return "having_IP_Address"
+        return "port"
 
     @staticmethod
     def getFeature(target):
