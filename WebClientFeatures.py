@@ -89,7 +89,7 @@ class RequestURLExtractor (WebClientExtractor):
         if len(resources)>0:
             ratio = (external / len(resources)) * 100 
         else:
-            ratio = 100
+            ratio = 0
 
         return Feature.Legitimate if ratio < 22 else (
                Feature.Suspicious if ratio < 61 else
@@ -124,7 +124,7 @@ class anchorURLExtractor (WebClientExtractor):
         if len(resources)>0:
             ratio = (external / len(resources)) * 100 
         else:
-            ratio = 100
+            ratio = 0
 
         return Feature.Legitimate if ratio < 31 else (
                Feature.Suspicious if ratio < 67 else
@@ -164,7 +164,7 @@ class LinksInMetaExtractor (WebClientExtractor):
         if len(links)>0:
             ratio = (external / len(links)) * 100 
         else:
-            ratio = 100
+            ratio = 0
 
         return Feature.Legitimate if ratio < 17 else (
                Feature.Suspicious if ratio < 81 else
