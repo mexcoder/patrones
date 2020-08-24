@@ -103,9 +103,14 @@ class NumberSubdomainsExtractor(UrlParsed):
     @staticmethod
     def getFeature(target):
         parsed = urlparse(target)
-        subdomains = get_tld(target, as_object=True).subdomains.split(".")
-        count = len(subdomains) + 1 # add one to account for the main domain
-        if("www" in subdomains):
+        subdomains = get_tld(target, as_object=True).subdomain.split(".")
+        count = len(subdomains)
+        # special case, if there is no subdomain ie. http://facebook.com then
+        # subdomains will contain an empty string
+        if not(count == 1 and subdomains[0] == ''):
+            count += 1 # add one to account for the main domain
+
+        if "www" in subdomains:
             count -= 1
         
         return Feature.Legitimate if count == 1 else \
@@ -148,6 +153,7 @@ class NonStandarPortExtractor(UrlParsed):
                Feature.Pishing
 
 if __name__ == "__main__":
+    print(NumberSubdomainsExtractor.getFeature("http://www.facebook.com"))
     print(NonStandarPortExtractor.getFeature("https://mexcoder.com"))
     print(NonStandarPortExtractor.getFeature("https://mexcoder.com:69"))
     print(NonStandarPortExtractor.getFeature("https://mexcoder.com:8080"))

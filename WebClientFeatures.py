@@ -42,7 +42,7 @@ class FavIconStatusExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], data)
+        parser = bs4.BeautifulSoup(data["body"], "html")
 
         favicon = parser.find("link", rel="icon")
         
@@ -65,7 +65,7 @@ class RequestURLExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], data)
+        parser = bs4.BeautifulSoup(data["body"], "html")
         
         domain = urlparse(target).hostname
 
@@ -85,8 +85,10 @@ class RequestURLExtractor (WebClientExtractor):
         for resource in resources:
             if resource != domain:
                 external += 1
-
-        ratio = (external / len(resources)) * 100 
+        if len(resources)>0:
+            ratio = (external / len(resources)) * 100 
+        else:
+            ratio = 100
 
         return Feature.Legitimate if ratio < 22 else (
                Feature.Suspicious if ratio < 61 else
@@ -102,7 +104,7 @@ class anchorURLExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], data)
+        parser = bs4.BeautifulSoup(data["body"], "html")
         
         domain = urlparse(target).hostname
 
@@ -115,8 +117,10 @@ class anchorURLExtractor (WebClientExtractor):
         for resource in resources:
             if resource != domain:
                 external += 1
-
-        ratio = (external / len(resources)) * 100 
+        if len(resources)>0:
+            ratio = (external / len(resources)) * 100 
+        else:
+            ratio = 100
 
         return Feature.Legitimate if ratio < 31 else (
                Feature.Suspicious if ratio < 67 else
@@ -132,7 +136,7 @@ class LinksInMetaExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], data)
+        parser = bs4.BeautifulSoup(data["body"], "html")
         
         domain = urlparse(target).hostname
         
@@ -152,8 +156,11 @@ class LinksInMetaExtractor (WebClientExtractor):
         for resource in links:
             if resource != domain:
                 external += 1
-
-        ratio = (external / len(links)) * 100 
+                
+        if len(links)>0:
+            ratio = (external / len(links)) * 100 
+        else:
+            ratio = 100
 
         return Feature.Legitimate if ratio < 17 else (
                Feature.Suspicious if ratio < 81 else
@@ -169,7 +176,7 @@ class ServerFromHandlerExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], data)
+        parser = bs4.BeautifulSoup(data["body"], "html")
         
         domain = urlparse(target).hostname
 
@@ -196,7 +203,7 @@ class MailToInServerFromHandlerExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], data)
+        parser = bs4.BeautifulSoup(data["body"], "html")
 
         forms = [urlparse(form["action"]).hostname for form in parser.findAll("form")]
 
@@ -218,7 +225,7 @@ class IframeExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], data)
+        parser = bs4.BeautifulSoup(data["body"], "html")
 
         iframe = parser.find("iframe")
 
