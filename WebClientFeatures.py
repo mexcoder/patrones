@@ -22,8 +22,9 @@ class HttpsStatusExtractor (WebClientExtractor):
 
         data = WebClientExtractor.fetchPage(target)
         useHTTPS = data["certificate"] is not None
-        certIsValid = data["validSsl"]
-        age = data["certificate"]["notAfter"] - data["certificate"]["notBefore"]
+        if useHTTPS:
+            certIsValid = data["validSsl"]
+            age = data["certificate"]["notAfter"] - data["certificate"]["notBefore"]
 
         legit = useHTTPS and certIsValid and age >= timedelta(days=365)
         suspicious = useHTTPS and not certIsValid
@@ -42,7 +43,7 @@ class FavIconStatusExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], "html")
+        parser = bs4.BeautifulSoup(data["body"], "html.parser")
 
         favicon = parser.find("link", rel="icon")
         
@@ -65,7 +66,7 @@ class RequestURLExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], "html")
+        parser = bs4.BeautifulSoup(data["body"], "html.parser")
         
         domain = urlparse(target).hostname
 
@@ -104,13 +105,16 @@ class anchorURLExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], "html")
+        parser = bs4.BeautifulSoup(data["body"], "html.parser")
         
         domain = urlparse(target).hostname
 
         links = parser.findAll("a")
 
-        resources = [urlparse(link["href"]).hostname  for link in links]
+        resources =[]
+        for link in links:
+            if "href" in link:
+                resources.append(urlparse(link["href"]).hostname)
 
         external = 0
 
@@ -136,7 +140,7 @@ class LinksInMetaExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], "html")
+        parser = bs4.BeautifulSoup(data["body"], "html.parser")
         
         domain = urlparse(target).hostname
         
@@ -145,7 +149,7 @@ class LinksInMetaExtractor (WebClientExtractor):
         meta = parser.findAll("meta")
 
         for metadata in meta:
-            if urlparse(metadata["content"]).scheme != "":
+            if "content" in metadata and urlparse(metadata["content"]).scheme != "":
                 links.append(urlparse(metadata["content"]).hostname)
 
         links += [urlparse(script["src"]).hostname for script in parser.findAll("Script")]
@@ -176,7 +180,7 @@ class ServerFromHandlerExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], "html")
+        parser = bs4.BeautifulSoup(data["body"], "html.parser")
         
         domain = urlparse(target).hostname
 
@@ -203,14 +207,15 @@ class MailToInServerFromHandlerExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], "html")
-
+        parser = bs4.BeautifulSoup(data["body"], "html.parser")
+    
         forms = [urlparse(form["action"]).hostname for form in parser.findAll("form")]
 
         wronfSFH = False
 
         for form in forms:
-            wronfSFH = "mailto:" in form 
+            if form is not None: # form may be None is there are forms whit relative paths
+                wronfSFH = "mailto:" in form 
 
         return Feature.Pishing if wronfSFH else \
                Feature.Legitimate
@@ -225,7 +230,7 @@ class IframeExtractor (WebClientExtractor):
     def getFeature(target):
 
         data = WebClientExtractor.fetchPage(target)
-        parser = bs4.BeautifulSoup(data["body"], "html")
+        parser = bs4.BeautifulSoup(data["body"], "html.parser")
 
         iframe = parser.find("iframe")
 
