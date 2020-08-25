@@ -6,14 +6,16 @@ def getTagAndFeatures(target):
     if isinstance(target, list):
         res = []
         for t in target:
-            res.append((t, extractFeatures(t)))
+            res.append({t: extractFeatures(t)})
     else:
-        res = (target, extractFeatures(target))
+        res = {target: extractFeatures(target)}
     
     return res
 
 if __name__ == "__main__":
     import sys
+    from pprint import pprint
+    import json
     target = None
 
     if len(sys.argv) > 2:
@@ -24,5 +26,6 @@ if __name__ == "__main__":
             # remove extra blankspaces that may be there like \n
             target = [t.strip() for t in target]
 
-    if target is not None:       
-        print (getTagAndFeatures(target))
+    if target is not None:
+        print (json.dumps(getTagAndFeatures(target)))       
+        

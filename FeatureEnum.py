@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import IntEnum
 
-class Feature(Enum):
+class Feature(IntEnum):
     Pishing = 1
     Suspicious = 0
     Legitimate = -1

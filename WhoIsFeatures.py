@@ -21,6 +21,8 @@ class DomainRegistrationExtractor(WhoISExtractor):
     def getFeature(target):
         whois = WhoISExtractor.fetchWhois(target)
 
+        if whois["expiration_date"] is None:
+            return Feature.Pishing
         return Feature.Pishing if  whois["expiration_date"] - datetime.now() <= timedelta(days=365) else Feature.Legitimate
 
 class DomainAgeExtractor(WhoISExtractor):
@@ -35,11 +37,16 @@ class DomainAgeExtractor(WhoISExtractor):
         if isinstance(creationDate, list):
             creationDate = creationDate[0]
 
+        if creationDate is None:
+            return Feature.Pishing
+
         return Feature.Pishing if datetime.now() - creationDate  <= timedelta(days=30*6) else Feature.Legitimate
 
 if __name__ == "__main__":
     from pprint import pprint
     
-    pprint(DomainAgeExtractor.getFeature("facebook.com"))
-    print ("="*80)
-    pprint(DomainAgeExtractor.getFeature("mexcoder.com"))
+    # pprint(DomainRegistrationExtractor.getFeature("facebook.com"))
+    # print ("="*80)
+    # pprint(DomainRegistrationExtractor.getFeature("mexcoder.com"))
+    # print ("="*80)
+    pprint(DomainRegistrationExtractor.getFeature("scotiaportal.ir"))

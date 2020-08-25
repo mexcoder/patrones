@@ -8,14 +8,15 @@ from WebClientFeatures import  HttpsStatusExtractor,FavIconStatusExtractor
 from WebClientFeatures import  RequestURLExtractor,anchorURLExtractor
 from WebClientFeatures import  LinksInMetaExtractor,ServerFromHandlerExtractor
 from WebClientFeatures import  MailToInServerFromHandlerExtractor,IframeExtractor
+from WhoIsFeatures import DomainAgeExtractor, DomainRegistrationExtractor
 
 
-extractors = [LenExtractor, AtSymbolExtractor, DashExtractor,HttpsTokenExtractor,
-              IpExtractor, NonStandarPortExtractor, NumberSubdomainsExtractor,
-              RedirectExtractor, UrlShortenedExtractor, AlexaRankExtractor,
-              HttpsStatusExtractor,FavIconStatusExtractor,RequestURLExtractor,
-              anchorURLExtractor,LinksInMetaExtractor,ServerFromHandlerExtractor,
-              MailToInServerFromHandlerExtractor, IframeExtractor]
+extractors =  [IpExtractor, LenExtractor, UrlShortenedExtractor, AtSymbolExtractor,
+               RedirectExtractor, DashExtractor, NumberSubdomainsExtractor, 
+               HttpsStatusExtractor, DomainRegistrationExtractor, FavIconStatusExtractor,
+               NonStandarPortExtractor, HttpsTokenExtractor, RequestURLExtractor, 
+               anchorURLExtractor, LinksInMetaExtractor, ServerFromHandlerExtractor,
+               MailToInServerFromHandlerExtractor, IframeExtractor, DomainAgeExtractor]
 
 nameMapping = {"Length" : "URL_Length"}
 
@@ -36,10 +37,12 @@ def extractFeatures(target):
 
 if __name__ == "__main__":
     import sys
+    from pprint import pprint
+    import json
     
     testString = "https://test.com"
 
     if len(sys.argv) > 2:
         testString = sys.argv[1]
 
-    print (extractFeatures(testString))
+    pprint (json.dumps(extractFeatures(testString)))
